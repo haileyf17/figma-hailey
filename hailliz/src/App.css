@@ -1,0 +1,98 @@
+/* ---------- Page background: centers the card ---------- */
+* {
+  box-sizing: border-box;
+}
+ 
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #e0e7ff 0%, #f5f3ff 100%);
+  color: #1f2937;
+}
+ 
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;      /* vertical centering */
+  justify-content: center;  /* horizontal centering */
+  padding: 24px;
+}
+ 
+/* ---------- The white card ---------- */
+.signup-card {
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;   /* stack everything vertically */
+}
+ 
+.signup-card h1 {
+  margin: 0 0 4px;
+  font-size: 1.75rem;
+}
+ 
+.subtitle {
+  margin: 0 0 24px;
+  color: #6b7280;
+}
+ 
+/* ---------- Labels and inputs ---------- */
+label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+ 
+input {
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+ 
+input:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+ 
+/* ---------- Button ---------- */
+button {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #4f46e5;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+ 
+button:hover:not(:disabled) {
+  background: #4338ca;
+}
+ 
+button:disabled {
+  background: #a5b4fc;
+  cursor: not-allowed;
+}
+ 
+/* ---------- Messages ---------- */
+.error {
+  color: #dc2626;
+  font-size: 0.9rem;
+  margin: -8px 0 16px;
+}
+ 
+.success {
+  color: #16a34a;
+  font-size: 0.9rem;
+  margin: 16px 0 0;
+  text-align: center;
+}
