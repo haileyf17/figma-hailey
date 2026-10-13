@@ -1,141 +1,182 @@
 import { useState } from 'react'
 import { supabase } from './supabaseClient'
 import './App.css'
- 
-function App() {
+
+import weblogo from './assets/weblogo.png'
+import hero from './assets/Abstraction.png'
+import google from './assets/google.png'
+import facebook from './assets/facebook.png'
+import lock from './assets/lock.png'
+
+/* ---------- Component 1: reusable input (takes props) ---------- */
+function FormInput({ id, type = 'text', placeholder, value, onChange, icon, iconAlt = '' }) {
+  return (
+    <div className="input-wrap">
+      <input
+        id={id}
+        type={type}
+        placeholder={placeholder}
+        aria-label={placeholder}
+        value={value}
+        onChange={onChange}
+        className={icon ? 'has-icon' : ''}
+      />
+      {icon && <img src={icon} alt={iconAlt} className="input-icon" />}
+    </div>
+  )
+}
+
+/* ---------- Component 2: social sign-up button (takes props) ---------- */
+function SocialButton({ icon, label }) {
+  return (
+    <button type="button" className="social-btn">
+      <img src={icon} alt="" />
+      <span>{label}</span>
+    </button>
+  )
+}
+
+/* ---------- Component 3: left panel ---------- */
+function LeftPanel() {
+  return (
+    <section className="left">
+      <img src={weblogo} alt="Logo" className="weblogo" />
+      <h1 className="hero-title">Getting Started With VR Creation</h1>
+      <img src={hero} alt="Abstract 3D shapes" className="hero-img" />
+    </section>
+  )
+}
+
+/* ---------- Component 4: the form with the Supabase logic ---------- */
+function SignupForm() {
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
   const [message, setMessage] = useState('')
-  const [errorMessage, setErrorMessage] = useState('') // NEW
-  const [loading, setLoading] = useState(false)       // NEW
- 
-  const passwordsMatch = password === confirmPassword
+  const [errorMessage, setErrorMessage] = useState('')
+  const [loading, setLoading] = useState(false)
+
   const canSubmit =
     fullName.trim() !== '' &&
     email.trim() !== '' &&
     password.length >= 6 &&
-    passwordsMatch &&
-    !loading // NEW: block double-clicks while saving
- 
-  // NEW: async lets us use await inside this function
+    !loading
+
   async function handleSubmit(event) {
     event.preventDefault()
     setMessage('')
     setErrorMessage('')
- 
-    // 1. Validate again (never trust the button alone)
-    if (!passwordsMatch) {
-      setErrorMessage('Passwords do not match.')
-      return
-    }
+
     if (password.length < 6) {
       setErrorMessage('Password must be at least 6 characters.')
       return
     }
- 
+
     setLoading(true)
- 
-    // 2. Create the account in Supabase Auth (auth.users)
+
     const { data, error: signUpError } = await supabase.auth.signUp({
       email: email.trim(),
       password: password,
     })
- 
+
     if (signUpError) {
-      setErrorMessage(signUpError.message) // e.g. "User already registered"
+      setErrorMessage(signUpError.message)
       setLoading(false)
       return
     }
- 
-    // If there is no session, email confirmation is turned on
-    // and the insert below would be blocked by RLS.
+
     if (!data.session) {
       setErrorMessage('Account created, but email confirmation is on. Ask your teacher.')
       setLoading(false)
       return
     }
- 
-    // 3. Save the profile row in YOUR table (public.users)
+
     const { error: insertError } = await supabase.from('users').insert({
-      id: data.user.id, // the same id Supabase Auth just created
+      id: data.user.id,
       full_name: fullName.trim(),
       email: email.trim(),
     })
- 
+
     if (insertError) {
       setErrorMessage('Account created, but saving your profile failed: ' + insertError.message)
       setLoading(false)
       return
     }
- 
-    // 4. Success! Show a message and clear the form
+
     setMessage(`Welcome, ${fullName.trim()}! Your account was created.`)
     setFullName('')
     setEmail('')
     setPassword('')
-    setConfirmPassword('')
     setLoading(false)
   }
- 
+
   return (
-    <div className="page">
-      <form className="signup-card" onSubmit={handleSubmit}>
-        <h1>Create an account</h1>
-        <p className="subtitle">Sign up to get started.</p>
- 
-        <label htmlFor="fullName">Full name</label>
-        <input
+    <form className="signup-form" onSubmit={handleSubmit}>
+      <h2>Create Account</h2>
+
+      <div className="button-row">
+        <SocialButton icon={google} label="Signup with Google" />
+        <SocialButton icon={facebook} label="Signup with Facebook" />
+      </div>
+
+      <p className="or">- OR -</p>
+
+      <div className="inputs">
+        <FormInput
           id="fullName"
-          type="text"
-          placeholder="Jane Doe"
+          placeholder="Full Name"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
         />
- 
-        <label htmlFor="email">Email</label>
-        <input
+        <FormInput
           id="email"
           type="email"
-          placeholder="you@example.com"
+          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
- 
-        <label htmlFor="password">Password</label>
-        <input
+        <FormInput
           id="password"
           type="password"
-          placeholder="At least 6 characters"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          icon={lock}
+          iconAlt="Lock"
         />
- 
-        <label htmlFor="confirmPassword">Confirm password</label>
-        <input
-          id="confirmPassword"
-          type="password"
-          placeholder="Type it again"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
- 
-        {confirmPassword !== '' && !passwordsMatch && (
-          <p className="error">Passwords do not match.</p>
-        )}
- 
-        {/* NEW: the button text changes while saving */}
-        <button type="submit" disabled={!canSubmit}>
-          {loading ? 'Creating account…' : 'Sign Up'}
-        </button>
- 
-        {/* NEW: server errors and success messages */}
-        {errorMessage && <p className="error server-error">{errorMessage}</p>}
-        {message && <p className="success">{message}</p>}
-      </form>
+      </div>
+
+      <button type="submit" className="create-btn" disabled={!canSubmit}>
+        {loading ? 'Creating account…' : 'Create Account'}
+      </button>
+
+      {errorMessage && <p className="error">{errorMessage}</p>}
+      {message && <p className="success">{message}</p>}
+
+      <p className="login-text">
+        Already have an account? <a href="#">Log In</a>
+      </p>
+    </form>
+  )
+}
+
+/* ---------- App: puts the pieces together ---------- */
+function App() {
+  return (
+    <div className="page">
+      <LeftPanel />
+
+      <main className="right">
+        <div className="select-right">
+          <select name="language" aria-label="Language">
+            <option value="en-GB">English (UK)</option>
+          </select>
+        </div>
+
+        <SignupForm />
+      </main>
     </div>
   )
 }
- 
+
 export default App

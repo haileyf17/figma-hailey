@@ -1,98 +1,305 @@
-/* ---------- Page background: centers the card ---------- */
-* {
-  box-sizing: border-box;
+
+:root {
+  --color-primary: #1f485b;
+  --color-white: #ffffff;
+  --color-text: #000000;
+  --color-muted: #bebcbc;
+  --color-or: #cdcaca;
+  --color-border: #f3f3f3;
+  --color-error: #dc2626;
+  --color-success: #16a34a;
+  --font-main: 'Poppins', sans-serif;
+  --radius-panel: 36px;
+  --radius-sm: 8px;
 }
- 
+
 body {
-  margin: 0;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(135deg, #e0e7ff 0%, #f5f3ff 100%);
-  color: #1f2937;
+  background-color: var(--color-primary);
+  font-family: var(--font-main);
 }
- 
+
+/* ---------- Layout ---------- */
 .page {
-  min-height: 100vh;
   display: flex;
-  align-items: center;      /* vertical centering */
-  justify-content: center;  /* horizontal centering */
+  min-height: 100vh;
+  width: 100%;
+}
+
+.left {
+  flex: 1;
+  position: relative;
   padding: 24px;
 }
- 
-/* ---------- The white card ---------- */
-.signup-card {
-  width: 100%;
-  max-width: 400px;
-  background: #ffffff;
-  padding: 32px;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+.right {
+  position: relative;
+  z-index: 1;
+  width: 60%;
+  min-height: 100vh;
+  background-color: var(--color-white);
+  border-radius: var(--radius-panel) 0 0 var(--radius-panel);
   display: flex;
-  flex-direction: column;   /* stack everything vertically */
+  flex-direction: column;
+  align-items: center;
 }
- 
-.signup-card h1 {
-  margin: 0 0 4px;
-  font-size: 1.75rem;
+
+/* ---------- Left panel ---------- */
+.weblogo {
+  width: 100px;
+  height: auto;
+  display: block;
 }
- 
-.subtitle {
-  margin: 0 0 24px;
-  color: #6b7280;
+
+.hero-title {
+  color: var(--color-white);
+  font-family: var(--font-main);
+  font-weight: 400;
+  font-size: 35px;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  max-width: 330px;
+  margin: 24px 0 0;
 }
- 
-/* ---------- Labels and inputs ---------- */
-label {
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-bottom: 6px;
+
+.hero-img {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  width: clamp(300px, 40vw, 560px);
+  height: auto;
+  pointer-events: none;
 }
- 
+
+/* ---------- Language select ---------- */
+.select-right {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 20px;
+}
+
+select {
+  border: none;
+  background: transparent;
+  font-family: var(--font-main);
+  font-size: 14px;
+  font-weight: 400;
+  margin-right: 20px;
+}
+
+/* ---------- Form ---------- */
+.signup-form {
+  width: 70%;
+  max-width: 520px;
+  margin-top: 100px;
+  padding-bottom: 40px;
+}
+
+.signup-form h2 {
+  font-family: var(--font-main);
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--color-text);
+  margin: 0 0 20px;
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.social-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 8px;
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-main);
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.social-btn img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.social-btn:hover {
+  background-color: var(--color-border);
+}
+
+.or {
+  text-align: center;
+  margin: 24px 0 0;
+  color: var(--color-or);
+  font-family: var(--font-main);
+  font-weight: 300;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  line-height: 35px;
+}
+
+/* ---------- Inputs ---------- */
+.inputs {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.input-wrap {
+  position: relative;
+}
+
 input {
-  padding: 12px;
-  margin-bottom: 16px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 1rem;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  padding: 8px 0;
+  font-family: var(--font-main);
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  background: transparent;
 }
- 
+
+input::placeholder {
+  color: var(--color-muted);
+  font-family: var(--font-main);
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+}
+
 input:focus {
   outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+  border-bottom-color: var(--color-primary);
 }
- 
-/* ---------- Button ---------- */
-button {
-  padding: 12px;
+
+input.has-icon {
+  padding-right: 32px;
+}
+
+.input-icon {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+}
+
+/* ---------- Main button ---------- */
+.create-btn {
+  width: 100%;
+  margin-top: 40px;
+  padding: 14px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
   border: none;
-  border-radius: 8px;
-  background: #4f46e5;
-  color: #ffffff;
-  font-size: 1rem;
+  border-radius: 6px;
+  font-family: var(--font-main);
   font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.08em;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: opacity 0.2s;
 }
- 
-button:hover:not(:disabled) {
-  background: #4338ca;
+
+.create-btn:hover:not(:disabled) {
+  opacity: 0.85;
 }
- 
-button:disabled {
-  background: #a5b4fc;
+
+.create-btn:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }
- 
-/* ---------- Messages ---------- */
+
+/* ---------- Messages and login text ---------- */
 .error {
-  color: #dc2626;
-  font-size: 0.9rem;
-  margin: -8px 0 16px;
-}
- 
-.success {
-  color: #16a34a;
-  font-size: 0.9rem;
+  color: var(--color-error);
+  font-size: 14px;
   margin: 16px 0 0;
   text-align: center;
+}
+
+.success {
+  color: var(--color-success);
+  font-size: 14px;
+  margin: 16px 0 0;
+  text-align: center;
+}
+
+.login-text {
+  margin: 20px 0 0;
+  color: var(--color-muted);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
+.login-text a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-text a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Tablet and phone ---------- */
+@media (max-width: 900px) {
+  .page {
+    flex-direction: column;
+  }
+
+  .left {
+    flex: none;
+    padding: 24px;
+  }
+
+  .hero-title {
+    font-size: 26px;
+    max-width: none;
+  }
+
+  .hero-img {
+    position: static;
+    display: block;
+    width: 70%;
+    max-width: 280px;
+    margin: 16px auto 0;
+  }
+
+  .right {
+    width: 100%;
+    min-height: auto;
+    border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+    margin-top: 16px;
+  }
+
+  .signup-form {
+    width: 88%;
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .button-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .or {
+    font-size: 16px;
+  }
 }
